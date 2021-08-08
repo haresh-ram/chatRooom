@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>ChatRoom</title>
+</head>
+<body>
+
+<textarea id="text" rows="10" cols="50"></textarea><br><br>
+<input id="har" type="text" size="50">
+<input type="submit" value="send" onclick="fun()">
+</body>
+
+<script>
+
+	var soc = new WebSocket("ws://localhost:8090/chatroom/serv"); 
+	
+	soc.onopen = function(){
+		console.log("opened!!!!!!!");
+	};
+	soc.onmessage = function(str){
+		var st = JSON.parse(str.data);
+		text.value+=st.text+"\n";
+	};
+	
+	function fun(){
+		if(har.value!=""){
+			var obj = {
+				text:har.value	
+			};
+			var json = JSON.stringify(obj);
+			soc.send(json);
+			har.value="";
+		}
+	}
+
+
+</script>
+</html>
